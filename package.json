@@ -1,0 +1,20 @@
+{
+  "name": "line-bot-rag",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vercel dev",
+    "test": "node --test",
+    "verify": "npm test"
+  },
+  "dependencies": {
+    "@line/bot-sdk": "^9.8.0"
+  },
+  "devDependencies": {
+    "vercel": "^34.3.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

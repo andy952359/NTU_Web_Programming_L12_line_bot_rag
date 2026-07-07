@@ -1,0 +1,227 @@
+Updated todo list
+
+我會把這整理成一份可執行的 MVP 計畫，並把每個階段都配上明確的測驗門檻；因為目前沒有開啟 workspace，我會先用通用 LINE Bot + Embedding/RAG 架構來規劃。
+
+我先檢查目前的 session plan 狀態，接著會把 MVP 拆成階段、測驗項目與通過標準寫進計畫檔。
+
+Read memory
+
+目前沒有既有計畫或專案檔，所以我會建立一份獨立的 MVP 規劃文件，路徑先以建議專案結構表示，方便之後直接落地。
+
+Created memory file /memories/session/plan.md
+
+目前沒有開啟 workspace，所以我無法把計畫寫入 `/memories/session/plan.md`，因為 session memory 需要 active workspace。不過下面是可直接拿去執行的 MVP 規劃，已按「測驗階段」拆分。
+
+**MVP 目標**
+
+做一個最小可用的 LINE Bot + GPT Embedding/RAG 問答系統。
+
+核心驗證：
+
+1. LINE Bot 可以穩定收訊息、回訊息。
+2. FAQ/知識庫可以轉成 embedding 並做語意搜尋。
+3. 使用者問題可以找到相關資料。
+4. GPT 只根據找到的資料回答。
+5. 找不到資料時，不亂編答案。
+
+建議第一版先不要上複雜向量資料庫。先用：
+
+- Node.js + Express
+- LINE Messaging API
+- OpenAI Embedding API
+- 本地 FAQ JSON
+- 本地 cosine similarity 搜尋
+- OpenAI Chat Completion
+
+等 MVP 通過後，再升級成 Supabase pgvector、Pinecone、Qdrant。
+
+**Phase 0：範圍定義**
+
+先鎖定一個很小的客服 FAQ 場景，例如：
+
+- 退貨
+- 付款方式
+- 配送時間
+- 會員問題
+- 發票問題
+
+準備 20 到 50 筆 FAQ，每筆包含：
+
+- `id`
+- `question`
+- `answer`
+- `category`
+
+MVP 暫時不做：
+
+- 訂單查詢
+- 會員登入
+- 真人客服後台
+- 多輪對話記憶
+- 後台 FAQ 管理介面
+- 複雜權限控管
+
+**Phase 1：LINE Bot Webhook**
+
+實作內容：
+建立 Node.js 專案，建議使用 Vercel Serverless Function 架構。
+建立 LINE webhook endpoint，例如 /api/webhook。
+加入 LINE Messaging API 簽章驗證。
+實作文字訊息接收。
+先回覆固定訊息，例如「我收到你的訊息了」。
+設定 .env.example，包含：
+LINE_CHANNEL_ACCESS_TOKEN
+LINE_CHANNEL_SECRET
+OPENAI_API_KEY
+部署到 Vercel Preview 或 Production。
+將 Vercel URL 設定到 LINE Developers Webhook URL。
+
+測驗 A：Webhook 連線測驗
+
+測試方式：
+
+- 用 LINE 傳 10 次文字訊息，例如 `hello`、`測試`、`退貨`。
+- 確認 bot 都能回覆。
+
+通過標準：
+
+- 10 次都成功回覆。
+- server 沒有 500 error。
+- LINE Developers 後台 webhook 驗證成功。
+- 沒有 reply token 重複使用錯誤。
+
+**Phase 2：FAQ Embedding**
+
+實作內容：
+
+1. 建立 `faqs.json`。
+2. 使用 OpenAI `text-embedding-3-small` 替每筆 FAQ 建 embedding。
+3. 將 embedding 存成本地快取，例如 `faq-embeddings.json`。
+4. 實作 cosine similarity。
+5. 使用者問題轉 embedding 後，找 top 3 到 top 5 筆相關 FAQ。
+
+建議資料格式：
+
+```json
+{
+  "id": "faq-return-001",
+  "question": "商品可以退貨嗎？",
+  "answer": "商品收到後七天內可以申請退貨，商品需保持完整包裝。",
+  "category": "return"
+}
+```
+
+測驗 B：FAQ 檢索測驗
+
+準備 10 題測試問題，例如：
+
+- 商品可以退貨嗎？
+- 我能不能刷信用卡？
+- 幾天會送到？
+- 發票可以開統編嗎？
+
+通過標準：
+
+- 至少 8 題 top 1 找到正確 FAQ。
+- 10 題 top 3 內都有合理 FAQ。
+- 相似問題也要能命中，例如「能退嗎？」應該命中退貨 FAQ。
+
+如果沒通過，先調整 FAQ 寫法，不要急著換模型。FAQ 內容太短、太混雜、答案不明確，都會影響 embedding 檢索效果。
+
+**Phase 3：RAG 回答**
+
+實作內容：
+
+1. LINE 收到使用者訊息。
+2. 將訊息轉 embedding。
+3. 搜尋 top 3 到 top 5 FAQ。
+4. 設定 similarity threshold。
+5. 若分數太低，回覆「目前資料中沒有相關資訊」。
+6. 若找到資料，把 FAQ 作為 context 丟給 GPT。
+7. GPT 根據 context 生成回答。
+8. 回覆 LINE 使用者。
+
+Prompt 策略：
+
+- system prompt 要明確要求「只能根據提供資料回答」。
+- 如果資料不足，要明確說不知道。
+- 不要讓模型自己補退貨條件、付款限制、配送天數。
+
+測驗 C：RAG 回答準確性測驗
+
+準備 10 題 FAQ 內有答案的問題，透過 LINE 問 bot。
+
+通過標準：
+
+- 至少 8 題回答與 FAQ 一致。
+- 不新增 FAQ 沒有的條件。
+- 不把不同 FAQ 混在一起。
+- 回答語氣自然，但不犧牲正確性。
+
+測驗 D：查無資料測驗
+
+準備 5 題 FAQ 沒有答案的問題，例如：
+
+- 可以用比特幣付款嗎？
+- 你們有海外倉嗎？
+- 可以幫我查訂單嗎？
+- 有沒有門市取貨？
+- 我想修改會員生日。
+
+通過標準：
+
+- 至少 4 題明確表示目前資料不足。
+- 不自行編造政策。
+- 不假裝可以查訂單或個資。
+
+**Phase 4：穩定性與錯誤處理**
+
+實作內容：
+
+1. 處理空訊息。
+2. 處理非文字訊息，例如圖片、貼圖。
+3. 處理 OpenAI API error。
+4. 處理 LINE reply error。
+5. 設定 timeout。
+6. 加入基本 logging。
+
+建議 log：
+
+- request id
+- user id hash
+- 使用者問題
+- matched FAQ ids
+- similarity score
+- GPT latency
+- total latency
+- 是否查無資料
+- error message
+
+測驗 E：壓力與穩定性測驗
+
+測試方式：
+
+- 連續傳 20 則訊息。
+- 包含正常問題、錯字、短句、空白、非 FAQ 問題、貼圖。
+
+通過標準：
+
+- server 不 crash。
+- LINE 都有合理回應。
+- 非文字訊息有 fallback。
+- OpenAI error 時有友善回覆。
+- 不超過 LINE reply token 可用時間。
+
+**Phase 5：成本與延遲測驗**
+
+實作內容：
+
+1. 記錄每次 embedding 耗時。
+2. 記錄每次 GPT 回答耗時。
+3. 記錄 token usage。
+4. 粗估每 1000 則訊息成本。
+5. 評估是否需要快取常見問題。
+
+
+
+
