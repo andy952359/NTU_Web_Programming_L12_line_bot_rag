@@ -30,3 +30,22 @@ Phase 1 implements a minimal LINE Messaging API webhook for Vercel.
 - Text messages receive `我收到你的訊息了`.
 - Non-text messages receive `目前只支援文字訊息。`.
 - Non-POST requests are rejected with `405`.
+
+## Phase 2 FAQ Embeddings
+
+FAQ source data lives in `data/faqs.json`.
+
+Generate local embedding cache after setting `OPENAI_API_KEY`:
+
+```bash
+npm run embed:faqs
+```
+
+This creates `data/faq-embeddings.json`, which is ignored by git because it can be regenerated from the FAQ source and OpenAI API.
+
+The search utilities in `lib/faq-search.js` provide:
+
+- FAQ schema validation
+- embedding input formatting
+- cosine similarity
+- top-k FAQ search with a minimum score threshold

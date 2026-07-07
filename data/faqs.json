@@ -1,0 +1,122 @@
+[
+  {
+    "id": "faq-return-001",
+    "question": "商品可以退貨嗎？",
+    "answer": "商品收到後七天內可以申請退貨，商品需保持完整包裝與未使用狀態。",
+    "category": "return"
+  },
+  {
+    "id": "faq-return-002",
+    "question": "退貨運費由誰負擔？",
+    "answer": "若商品瑕疵或出貨錯誤，退貨運費由我們負擔；若是個人因素退貨，運費由顧客負擔。",
+    "category": "return"
+  },
+  {
+    "id": "faq-return-003",
+    "question": "退貨退款需要多久？",
+    "answer": "退貨商品確認無誤後，退款會在七到十個工作天內退回原付款方式。",
+    "category": "return"
+  },
+  {
+    "id": "faq-payment-001",
+    "question": "可以使用哪些付款方式？",
+    "answer": "目前支援信用卡、ATM 轉帳、超商代碼付款與 LINE Pay。",
+    "category": "payment"
+  },
+  {
+    "id": "faq-payment-002",
+    "question": "信用卡付款失敗怎麼辦？",
+    "answer": "請確認卡號、有效期限、驗證碼與銀行授權狀態，仍失敗時可改用其他付款方式。",
+    "category": "payment"
+  },
+  {
+    "id": "faq-payment-003",
+    "question": "可以貨到付款嗎？",
+    "answer": "目前沒有提供貨到付款服務，請於下單時先完成線上付款。",
+    "category": "payment"
+  },
+  {
+    "id": "faq-shipping-001",
+    "question": "下單後多久會出貨？",
+    "answer": "完成付款後，現貨商品通常會在二到三個工作天內出貨。",
+    "category": "shipping"
+  },
+  {
+    "id": "faq-shipping-002",
+    "question": "配送需要幾天？",
+    "answer": "出貨後宅配約一到三個工作天送達，超商取貨約二到四個工作天送達。",
+    "category": "shipping"
+  },
+  {
+    "id": "faq-shipping-003",
+    "question": "可以指定配送時間嗎？",
+    "answer": "宅配可備註希望配送時段，但實際配送時間仍以物流安排為準。",
+    "category": "shipping"
+  },
+  {
+    "id": "faq-member-001",
+    "question": "如何加入會員？",
+    "answer": "請在網站右上角點選註冊，填寫手機或電子信箱並完成驗證即可加入會員。",
+    "category": "member"
+  },
+  {
+    "id": "faq-member-002",
+    "question": "忘記密碼怎麼辦？",
+    "answer": "請在登入頁點選忘記密碼，系統會寄送重設密碼連結到你的註冊信箱。",
+    "category": "member"
+  },
+  {
+    "id": "faq-member-003",
+    "question": "會員資料可以修改嗎？",
+    "answer": "登入會員中心後可以修改姓名、電話、地址與電子信箱等基本資料。",
+    "category": "member"
+  },
+  {
+    "id": "faq-invoice-001",
+    "question": "可以開立統一編號發票嗎？",
+    "answer": "可以，請在結帳頁的發票資訊填寫公司抬頭與統一編號。",
+    "category": "invoice"
+  },
+  {
+    "id": "faq-invoice-002",
+    "question": "發票會什麼時候開立？",
+    "answer": "發票會在訂單出貨後開立，並寄送電子發票通知到你的信箱。",
+    "category": "invoice"
+  },
+  {
+    "id": "faq-invoice-003",
+    "question": "發票資料填錯可以修改嗎？",
+    "answer": "若發票尚未開立，可聯繫客服協助修改；若已開立，需依發票作業規定處理。",
+    "category": "invoice"
+  },
+  {
+    "id": "faq-order-001",
+    "question": "如何查詢訂單狀態？",
+    "answer": "登入會員中心後，進入我的訂單即可查看付款、出貨與配送狀態。",
+    "category": "order"
+  },
+  {
+    "id": "faq-order-002",
+    "question": "下單後可以取消訂單嗎？",
+    "answer": "訂單尚未出貨前可以聯繫客服申請取消；若已出貨，請依退貨流程辦理。",
+    "category": "order"
+  },
+  {
+    "id": "faq-order-003",
+    "question": "可以修改訂單內容嗎？",
+    "answer": "訂單成立後無法直接修改商品內容，請聯繫客服協助取消後重新下單。",
+    "category": "order"
+  },
+  {
+    "id": "faq-coupon-001",
+    "question": "優惠券如何使用？",
+    "answer": "請在結帳頁輸入優惠券代碼，系統會自動計算折扣金額。",
+    "category": "coupon"
+  },
+  {
+    "id": "faq-coupon-002",
+    "question": "優惠券可以合併使用嗎？",
+    "answer": "每筆訂單限使用一張優惠券，無法與其他優惠券合併使用。",
+    "category": "coupon"
+  }
+]

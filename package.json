@@ -5,11 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "vercel dev",
+    "embed:faqs": "node scripts/generate-faq-embeddings.js",
     "test": "node --test",
     "verify": "npm test"
   },
   "dependencies": {
-    "@line/bot-sdk": "^9.8.0"
+    "@line/bot-sdk": "^9.8.0",
+    "openai": "^6.45.0"
   },
   "devDependencies": {
     "vercel": "^34.3.0"
