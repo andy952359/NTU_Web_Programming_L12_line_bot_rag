@@ -11,6 +11,7 @@ const handler = createWebhookHandler({
   createClient: () => ({
     replyMessage: replyMessageMock
   }),
+  createTextReply: async (text) => `RAG:${text}`,
   isValidSignature: (body, secret, signature) => (
     body.length > 0 && secret === "test-secret" && signature === "valid-signature"
   )
@@ -98,7 +99,7 @@ test("replies to text messages", async () => {
     messages: [
       {
         type: "text",
-        text: "我收到你的訊息了"
+        text: "RAG:hello"
       }
     ]
   });

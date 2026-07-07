@@ -1,4 +1,5 @@
 import { messagingApi, validateSignature } from "@line/bot-sdk";
+import { createRagResponder } from "../lib/rag.js";
 
 const { MessagingApiClient } = messagingApi;
 
@@ -29,13 +30,13 @@ function assertLineConfig() {
   return { channelAccessToken, channelSecret };
 }
 
-async function replyToEvent(client, event) {
+async function replyToEvent(client, event, createTextReply) {
   if (event.type !== "message" || !event.replyToken) {
     return;
   }
 
   const text = event.message?.type === "text"
-    ? "我收到你的訊息了"
+    ? await createTextReply(event.message.text)
     : "目前只支援文字訊息。";
 
   await client.replyMessage({
@@ -51,8 +52,11 @@ async function replyToEvent(client, event) {
 
 export function createWebhookHandler({
   createClient = (channelAccessToken) => new MessagingApiClient({ channelAccessToken }),
+  createTextReply,
   isValidSignature = validateSignature
 } = {}) {
+  const textReplyHandler = createTextReply ?? createRagResponder();
+
   return async function handler(request, response) {
   if (request.method !== "POST") {
     response.setHeader("Allow", "POST");
@@ -93,7 +97,7 @@ export function createWebhookHandler({
   const events = Array.isArray(payload.events) ? payload.events : [];
 
   try {
-    await Promise.all(events.map((event) => replyToEvent(client, event)));
+    await Promise.all(events.map((event) => replyToEvent(client, event, textReplyHandler)));
     jsonResponse(response, 200, { ok: true });
   } catch (error) {
     console.error("LINE reply error:", error);

@@ -49,3 +49,30 @@ The search utilities in `lib/faq-search.js` provide:
 - embedding input formatting
 - cosine similarity
 - top-k FAQ search with a minimum score threshold
+
+## Phase 3 Vercel RAG Reply
+
+The LINE webhook now uses OpenAI at runtime for text messages:
+
+1. Generate FAQ embeddings in memory from `data/faqs.json`.
+2. Generate an embedding for the user question.
+3. Search the top FAQ matches with cosine similarity.
+4. Ask OpenAI chat completion to answer using only the matched FAQ context.
+5. Reply to LINE with the generated answer.
+
+Required Vercel environment variables:
+
+```text
+LINE_CHANNEL_ACCESS_TOKEN
+LINE_CHANNEL_SECRET
+OPENAI_API_KEY
+```
+
+Optional environment variables:
+
+```text
+OPENAI_CHAT_MODEL=gpt-4o-mini
+RAG_MIN_SCORE=0.35
+```
+
+After changing Vercel environment variables, redeploy the project before testing the LINE webhook again.
